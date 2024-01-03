@@ -1,6 +1,11 @@
 #include "Agent.h"
+Agent::Agent() : d_solution{},d_fitness{0.0}
+{
+}
 
-Agent::Agent(std::vector<double>& solution):d_solution{solution}{}
+Agent::Agent(std::vector<double>& solution) : d_solution(solution) {
+}
+
 
 
 std::vector<double> Agent::getsolution()
@@ -19,7 +24,4 @@ void Agent::set_fitness(double fitness)
 	d_fitness = fitness;
 }
 
-Agent::Agent()
-{
 
-}

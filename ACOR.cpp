@@ -1,6 +1,5 @@
 #include "ACOR.h"
 
-
 OriginalACOR::OriginalACOR(int epoch, int pop_size, int sample_count, double intent_factor, double zeta, bool sort_flag)
     : epoch(epoch), pop_size(pop_size), sample_count(sample_count),
     intent_factor(intent_factor), zeta(zeta), sort_flag(sort_flag)
@@ -43,15 +42,11 @@ Agent OriginalACOR::generate_empty_agent(std::vector<double>& solution)
 void OriginalACOR::after_initialization()
 {
     // The initial population is sorted or not depending on the algorithm's strategy
-    auto result = get_special_agents(pop, 1, 1, d_p->minmax());
     std::vector<Agent> pop_temp;
     std::vector<Agent> best;
     std::vector<Agent> worst;
-    
-    pop_temp = std::get<0>(result);
-    best = std::get<1>(result);
-    worst = std::get<2>(result);
-    //std::tie(pop_temp, best, worst) = get_special_agents(pop, 1, 1, d_p->minmax());
+    get_special_agents(pop, 1, 1, d_p->minmax(), pop_temp,best,worst);
+   
     if (!best.empty() && !worst.empty()) {
         g_best = best[0];
         g_worst = worst[0];
@@ -66,7 +61,7 @@ void OriginalACOR::after_initialization()
 }
 
 
-std::vector<Agent> OriginalACOR::get_sorted_population(std::vector<Agent>& pop, const std::string& minmax)
+std::vector<Agent> OriginalACOR::get_sorted_population(const std::vector<Agent>& pop, const std::string& minmax)
 {
     if (minmax == "min")
     {
@@ -83,31 +78,27 @@ std::vector<Agent> OriginalACOR::get_sorted_population(std::vector<Agent>& pop, 
     return pop;
 }
 
-std::tuple<std::vector<Agent>, std::vector<Agent>, std::vector<Agent>> OriginalACOR::get_special_agents(std::vector<Agent>& pop, int n_best = 3, int n_worst = 3, std::string minmax = "min")
+void OriginalACOR::get_special_agents(
+    const std::vector<Agent>& pop, int n_best, int n_worst,
+    const std::string& minmax, std::vector<Agent>& sorted_pop,
+    std::vector<Agent>& best_agents, std::vector<Agent>& worst_agents)
 {
-    pop = get_sorted_population(pop, minmax);
+    // Sort the population based on the problem type (min or max)
+ 
+    
+    sorted_pop = get_sorted_population(pop,minmax);
 
-    if (n_best <= 0) {
-        if (n_worst <= 0) {
-            return { pop, {}, {} };
-        }
-        else {
-            std::vector<Agent> worst(pop.rbegin(), pop.rbegin() + std::min(n_worst, static_cast<int>(pop.size())));
-            return { pop, {}, worst };
-        }
+    // Get the best agents
+    if (n_best > 0) {
+        best_agents.assign(sorted_pop.begin(), sorted_pop.begin() + std::min(n_best, static_cast<int>(sorted_pop.size())));
     }
-    else {
-        if (n_worst <= 0) {
-            std::vector<Agent> best(pop.begin(), pop.begin() + std::min(n_best, static_cast<int>(pop.size())));
-            return { pop, best, {} };
-        }
-        else {
-            std::vector<Agent> best(pop.begin(), pop.begin() + std::min(n_best, static_cast<int>(pop.size())));
-            std::vector<Agent> worst(pop.rbegin(), pop.rbegin() + std::min(n_worst, static_cast<int>(pop.size())));
-            return { pop, best, worst };
-        }
+
+    // Get the worst agents
+    if (n_worst > 0) {
+        worst_agents.assign(sorted_pop.end() - std::min(n_worst, static_cast<int>(sorted_pop.size())), sorted_pop.end());
     }
 }
+
 
 void OriginalACOR::solve(Problem* probleme)
 {

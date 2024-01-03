@@ -13,7 +13,7 @@ public:
 	int n_dims();
 	std::string minmax();
 private:
-	using ObjectiveFunction = std::function<double(const std::vector<double>&)>;
+	using ObjectiveFunction = std::function<double(std::vector<double>&)>;
 	ObjectiveFunction obj_func;
 	int n_vars;
 	double lb;
