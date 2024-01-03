@@ -12,10 +12,18 @@ double f(std::vector<double>& solution)
 }
 int main()
 {
-	Problem* p = new Problem{ 30,0,10,f,"min" };
+	/*Problem* p = new Problem{30,0,10,f,"min"};
 	OriginalACOR acor(1000, 50, 25, 0.5, 1, 1);
 	Agent g_best = acor.solve(p);
-	std::cout << g_best.getfitness();
+	std::cout << g_best.getfitness();*/
+
+	std::vector<double> solution{ 1, 3, 4, 8, 9 };
+	Agent a{ solution };
+	Agent b;
+	b = a;
+	std::vector<double>s = b.getsolution();
+	for (int i = 0; i < s.size(); i++)
+		std::cout << s[i] << " , ";
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
