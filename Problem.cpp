@@ -26,7 +26,20 @@ double Problem::calculate_fitness(std::vector<double>& solution)
 
 std::vector<double> Problem::correct_solution(std::vector<double>& solution)
 {
-    return std::vector<double>();
+    std::vector<double> x_new;
+    for (int i = 0; i < n_vars; i++)
+        x_new.push_back(correct(solution[i]));
+    return x_new;
+}
+
+double Problem::correct(double value)
+{
+    if (value < lb)
+        return lb;
+    else if (value > ub) 
+        return ub;
+    else 
+        return value;
 }
 
 int Problem::n_dims()

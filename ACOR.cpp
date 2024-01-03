@@ -151,6 +151,13 @@ void OriginalACOR::solve(Problem* probleme)
     }
 }
 
+std::vector<Agent> OriginalACOR::get_sorted_and_trimmed_population(std::vector<Agent>& population)
+{
+    std::vector<Agent> newpop = get_sorted_population(population, d_p->minmax());
+    newpop.resize(pop_size);
+    return newpop;
+}
+
 void OriginalACOR::evolve(int epoch)
 {
     std::vector<int> pop_rank(pop_size);
@@ -213,14 +220,20 @@ void OriginalACOR::evolve(int epoch)
             child[jdx] = pop[rdx].getsolution()[jdx] + randomValue * matrix_sigma[rdx][jdx];
         }
 
-        std::vector<double> pos_new = correct_solution(child);
+        std::vector<double> pos_new = d_p->correct_solution(child);
         Agent agent = generate_empty_agent(pos_new);
         pop_new.push_back(agent);
         // You need to add a condition for the 'mode' check here
         pop_new.back().set_fitness(calculate_fitness(pos_new));
 
     }
+    std::vector<Agent> finalpop;
+    finalpop.reserve(pop.size() + pop_new.size());
 
-    pop_new = update_target_for_population(pop_new);
-    pop = get_sorted_and_trimmed_population(pop + pop_new, pop_size, d_p->minmax());
+    // Insert elements from the first vector
+    finalpop.insert(finalpop.end(), pop.begin(), pop.end());
+
+    // Insert elements from the second vector
+    finalpop.insert(finalpop.end(), pop_new.begin(), pop_new.end());
+    pop = get_sorted_and_trimmed_population(finalpop);
 }
