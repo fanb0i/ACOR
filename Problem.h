@@ -5,9 +5,10 @@
 class Problem
 {
 public:
-	Problem();
+	Problem(int _n_vars, double _lb, double ub);
 private:
 	using ObjectiveFunction = std::function<double(const std::vector<double>&)>;
+	ObjectiveFunction obj_func;
 	int n_vars;
 	double lb;
 	double ub;
