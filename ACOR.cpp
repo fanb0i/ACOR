@@ -2,7 +2,21 @@
 OriginalACOR::OriginalACOR(int epoch = 10000, int pop_size = 100, int sample_count = 25,
     double intent_factor = 0.5, double zeta = 1.0, bool sort_flag = true)
     : epoch(epoch), pop_size(pop_size), sample_count(sample_count),
-    intent_factor(intent_factor), zeta(zeta), sort_flag(sort_flag) {}
+    intent_factor(intent_factor), zeta(zeta), sort_flag(sort_flag) 
+{
+    pop.reserve(pop_size);
+}
+void OriginalACOR::generate_population()
+{
+    for (int i = 0; i < pop_size; ++i) {
+        pop.push_back(generate_agent());
+    }
+
+}
+Agent OriginalACOR::generate_agent()
+{
+    return Agent() ;
+}
 void OriginalACOR::solve(const Problem& probleme)
 {
 }
