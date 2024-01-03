@@ -7,18 +7,19 @@ Problem::Problem(int _n_vars, double _lb, double _ub, std::function<double( std:
 std::vector<double> Problem::generate_solution()
 {
     std::vector<double> solutions(n_vars);
-    std::random_device rd;
+
     
     std::uniform_real_distribution<double> dis(lb, ub);
 
     for (int i = 0; i < n_vars; ++i)
     {
+        std::random_device rd;
         std::mt19937 gen(rd());
         solutions[i] = dis(gen);
     }
     std::cout << "[ ";
     for (int i = 0; i < solutions.size(); i++) {
-        std::cout << solutions[0];
+        std::cout << solutions[i];
         std::cout << ", ";
     }
     std::cout << "] ";
