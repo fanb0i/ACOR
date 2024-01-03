@@ -14,6 +14,7 @@ Agent& Agent::operator=(const Agent& other)
 		// Perform the assignment
 		std::vector<double> solution = other.getsolution();
 		this->set_solution(solution);
+		this->set_fitness(other.getfitness());
 	}
 	return *this;
 }
