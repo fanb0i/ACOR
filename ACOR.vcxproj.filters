@@ -21,9 +21,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="optimizer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Agent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,14 +30,11 @@
     <ClCompile Include="Problem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Target.cpp">
+    <ClCompile Include="History.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="optimizer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ACOR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -53,7 +47,7 @@
     <ClInclude Include="Problem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Target.h">
+    <ClInclude Include="History.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

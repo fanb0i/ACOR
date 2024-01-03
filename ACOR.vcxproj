@@ -129,17 +129,17 @@
   <ItemGroup>
     <ClCompile Include="ACOR.cpp" />
     <ClCompile Include="Agent.cpp" />
+    <ClCompile Include="History.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Problem.cpp" />
     <ClCompile Include="Solution.cpp" />
-    <ClCompile Include="Target.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACOR.h" />
     <ClInclude Include="Agent.h" />
+    <ClInclude Include="History.h" />
     <ClInclude Include="Problem.h" />
     <ClInclude Include="Solution.h" />
-    <ClInclude Include="Target.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
