@@ -5,7 +5,7 @@ class Agent {
 public:
 	Agent();
 	Agent(std::vector<double>& solution);
-	Agent& operator=(Agent& other);
+	Agent& operator=(const Agent& other);
 	void set_solution(std::vector<double>& solution);
 	void set_fitness(double fitness);
 	double getfitness() const;

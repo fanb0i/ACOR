@@ -10,7 +10,7 @@ OriginalACOR::OriginalACOR(int epoch, int pop_size, int sample_count, double int
 
 double OriginalACOR::calculate_fitness(std::vector<double>& solution)
 {
-    d_p->calculate_fitness(solution);
+    return d_p->calculate_fitness(solution);
 }
 
 void OriginalACOR::generate_population()
@@ -97,7 +97,7 @@ void OriginalACOR::after_initialization()
 }
 
 
-std::vector<Agent> OriginalACOR::get_sorted_population(const std::vector<Agent>& pop, const std::string& minmax)
+std::vector<Agent> OriginalACOR::get_sorted_population(std::vector<Agent>& pop, const std::string& minmax)
 {
     if (minmax == "min")
     {
@@ -115,7 +115,7 @@ std::vector<Agent> OriginalACOR::get_sorted_population(const std::vector<Agent>&
 }
 
 void OriginalACOR::get_special_agents(
-    const std::vector<Agent>& pop, int n_best, int n_worst,
+    std::vector<Agent>& pop, int n_best, int n_worst,
     const std::string& minmax, std::vector<Agent>& sorted_pop,
     std::vector<Agent>& best_agents, std::vector<Agent>& worst_agents)
 {
@@ -154,6 +154,7 @@ Agent OriginalACOR::solve(Problem* probleme)
         track_optimize_step(pop, i, elapsed_time);
 
     }
+    return g_best;
 }
 
 std::vector<Agent> OriginalACOR::get_sorted_and_trimmed_population(std::vector<Agent>& population)

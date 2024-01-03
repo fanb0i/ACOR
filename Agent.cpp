@@ -8,7 +8,7 @@ Agent::Agent(std::vector<double>& solution) : d_solution(solution)
 
 }
 
-Agent& Agent::operator=(Agent& other)
+Agent& Agent::operator=(const Agent& other)
 {
 	if (this != &other) {
 		// Perform the assignment
