@@ -16,7 +16,12 @@ std::vector<double> Problem::generate_solution()
         std::mt19937 gen(rd());
         solutions[i] = dis(gen);
     }
-
+    std::cout << "[ ";
+    for (int i = 0; i < solutions.size(); i++) {
+        std::cout << solutions[0];
+        std::cout << ", ";
+    }
+    std::cout << "] ";
     return solutions;
 }
 
