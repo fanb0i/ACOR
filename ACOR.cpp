@@ -1,5 +1,6 @@
 #include "ACOR.h"
 
+
 OriginalACOR::OriginalACOR(int epoch, int pop_size, int sample_count, double intent_factor, double zeta, bool sort_flag)
     : epoch(epoch), pop_size(pop_size), sample_count(sample_count),
     intent_factor(intent_factor), zeta(zeta), sort_flag(sort_flag)
