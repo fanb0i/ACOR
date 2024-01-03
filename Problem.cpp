@@ -24,6 +24,11 @@ double Problem::calculate_fitness(std::vector<double>& solution)
     return obj_func(solution);
 }
 
+std::vector<double> Problem::correct_solution(std::vector<double>& solution)
+{
+    return std::vector<double>();
+}
+
 int Problem::n_dims()
 {
     return n_vars;

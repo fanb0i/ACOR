@@ -40,6 +40,44 @@ Agent OriginalACOR::generate_empty_agent(std::vector<double>& solution)
     return Agent(solution);
 }
 
+int OriginalACOR::get_index_roulette_wheel_selection(const std::vector<double>& list_fitness)
+{
+    std::mt19937 generator;
+    if (list_fitness.empty()) {
+        // Handle empty list
+        return -1; // or any other appropriate value
+    }
+
+    std::vector<double> final_fitness = list_fitness;
+    if (*std::min_element(list_fitness.begin(), list_fitness.end()) < 0) {
+        // Shift to handle negative fitness values
+        std::transform(final_fitness.begin(), final_fitness.end(), final_fitness.begin(),
+            [min_val = *std::min_element(list_fitness.begin(), list_fitness.end())](double val) {
+                return val - min_val;
+            });
+    }
+
+    double sum_fitness = std::accumulate(final_fitness.begin(), final_fitness.end(), 0.0);
+
+    if (sum_fitness == 0) {
+        // Handle the case where all fitness values are the same
+        return static_cast<int>(generator() % list_fitness.size());
+    }
+
+    // Normalize fitness values
+    std::for_each(final_fitness.begin(), final_fitness.end(),
+        [&sum_fitness](double& val) { val /= sum_fitness; });
+
+    std::discrete_distribution<int> distribution(final_fitness.begin(), final_fitness.end());
+
+    // Capture variables inside the lambda
+    return [this, &distribution, &generator]() {
+        return distribution(generator);
+        }();
+}
+
+
+
 void OriginalACOR::after_initialization()
 {
     // The initial population is sorted or not depending on the algorithm's strategy
@@ -105,6 +143,12 @@ void OriginalACOR::solve(Problem* probleme)
 {
     d_p = probleme;
     generate_population();
+    for (int i = 0; i < epoch; i++)
+    {
+        //TODO START COUNTER 
+        evolve(i);
+
+    }
 }
 
 void OriginalACOR::evolve(int epoch)
@@ -150,13 +194,23 @@ void OriginalACOR::evolve(int epoch)
 
     // Generate Samples
     std::vector<Agent> pop_new;
+    std::random_device rd;
+    std::mt19937 generator(rd());
     for (int idx = 0; idx < sample_count; ++idx)
     {
         std::vector<double> child(d_p->n_dims());
         for (int jdx = 0; jdx < d_p->n_dims(); ++jdx)
         {
             int rdx = get_index_roulette_wheel_selection(matrix_p);
-            child[jdx] = pop[rdx].getsolution()[jdx] + generator.normal() * matrix_sigma[rdx][jdx];
+            double mean = 0.0;
+            double stddev = 1.0;
+
+            // Create a normal distribution
+            std::normal_distribution<double> normalDistribution(mean, stddev);
+
+            // Generate a random number from the normal distribution
+            double randomValue = normalDistribution(generator);
+            child[jdx] = pop[rdx].getsolution()[jdx] + randomValue * matrix_sigma[rdx][jdx];
         }
 
         std::vector<double> pos_new = correct_solution(child);
