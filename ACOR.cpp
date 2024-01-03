@@ -139,7 +139,7 @@ void OriginalACOR::get_special_agents(
 }
 
 
-void OriginalACOR::solve(Problem* probleme)
+Agent OriginalACOR::solve(Problem* probleme)
 {
     d_p = probleme;
     generate_population();
