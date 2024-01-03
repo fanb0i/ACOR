@@ -1,8 +1,6 @@
 #include "Agent.h"
 
-Agent::Agent(std::vector<double>& solution):d_solution{solution}
-{
-}
+Agent::Agent(std::vector<double>& solution):d_solution{solution}{}
 
 
 std::vector<double> Agent::getsolution()
