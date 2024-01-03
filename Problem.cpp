@@ -8,11 +8,12 @@ std::vector<double> Problem::generate_solution()
 {
     std::vector<double> solutions(n_vars);
     std::random_device rd;
-    std::mt19937 gen(rd());
+    
     std::uniform_real_distribution<double> dis(lb, ub);
 
     for (int i = 0; i < n_vars; ++i)
     {
+        std::mt19937 gen(rd());
         solutions[i] = dis(gen);
     }
 
