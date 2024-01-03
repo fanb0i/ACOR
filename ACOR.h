@@ -4,6 +4,7 @@
 #include <vector>
 #include <numeric>
 #include <algorithm>
+#include <chrono>
 
 # define M_PI 3.14159265358979323846
 
@@ -35,4 +36,5 @@ public:
     Agent solve(Problem* probleme );
     std::vector<Agent> get_sorted_and_trimmed_population(std::vector<Agent>& population);
     void evolve(int epoch);
+    void track_optimize_step(std::vector<Agent>& population,int epoch, long time);
 };

@@ -94,9 +94,6 @@ void OriginalACOR::after_initialization()
     if (sort_flag) {
         pop = pop_temp;
     }
-
-    // Store initial best and worst solutions
-    history.store_initial_best_worst(g_best, g_worst);
 }
 
 
@@ -145,8 +142,16 @@ Agent OriginalACOR::solve(Problem* probleme)
     generate_population();
     for (int i = 0; i < epoch; i++)
     {
-        //TODO START COUNTER 
+        auto start_time = std::chrono::high_resolution_clock::now();
         evolve(i);
+        pop = get_sorted_population(pop,d_p->minmax());
+        g_best = pop[0];
+
+
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+        track_optimize_step(pop, i, elapsed_time);
 
     }
 }
@@ -236,4 +241,9 @@ void OriginalACOR::evolve(int epoch)
     // Insert elements from the second vector
     finalpop.insert(finalpop.end(), pop_new.begin(), pop_new.end());
     pop = get_sorted_and_trimmed_population(finalpop);
+}
+
+void OriginalACOR::track_optimize_step(std::vector<Agent>& population, int epoch, long time)
+{
+    std::cout << "Epoch : " << epoch << " , Current Best : " << population[0].getfitness() << " Runtime : " << time <<std::endl;
 }

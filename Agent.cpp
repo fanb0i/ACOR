@@ -8,9 +8,24 @@ Agent::Agent(std::vector<double>& solution) : d_solution(solution)
 
 }
 
+Agent& Agent::operator=(Agent& other)
+{
+	if (this != &other) {
+		// Perform the assignment
+		std::vector<double> solution = other.getsolution();
+		this->set_solution(solution);
+	}
+	return *this;
+}
+
+void Agent::set_solution(std::vector<double>& solution) 
+{
+	d_solution = solution;
+}
 
 
-std::vector<double> Agent::getsolution()
+
+std::vector<double> Agent::getsolution() const
 {
 	return d_solution;
 }
