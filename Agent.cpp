@@ -10,6 +10,11 @@ std::vector<double> Agent::getsolution()
 	return d_solution;
 }
 
+double Agent::getfitness() const
+{
+	return d_fitness;
+}
+
 
 void Agent::set_fitness(double fitness)
 {

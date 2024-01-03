@@ -40,9 +40,64 @@ Agent OriginalACOR::generate_empty_agent(std::vector<double>& solution)
     return Agent(solution);
 }
 
+void OriginalACOR::after_initialization()
+{
+
+}
+
+std::tuple<std::vector<Agent>, std::vector<Agent>, std::vector<Agent>> OriginalACOR::get_special_agents(std::vector<Agent>& pop, int n_best, int n_worst, const std::string& minmax)
+{
+    pop = get_sorted_population(pop, minmax);
+
+    if (n_best <= 0)
+    {
+        if (n_worst <= 0)
+        {
+            return std::make_tuple(pop, std::vector<Agent>(), std::vector<Agent>());
+        }
+        else
+        {
+            std::vector<Agent> worst_agents(pop.rbegin(), pop.rbegin() + std::min(n_worst, static_cast<int>(pop.size())));
+            return std::make_tuple(pop, std::vector<Agent>(), worst_agents);
+        }
+    }
+    else
+    {
+        if (n_worst <= 0)
+        {
+            std::vector<Agent> best_agents(pop.begin(), pop.begin() + std::min(n_best, static_cast<int>(pop.size())));
+            return std::make_tuple(pop, best_agents, std::vector<Agent>());
+        }
+        else
+        {
+            std::vector<Agent> best_agents(pop.begin(), pop.begin() + std::min(n_best, static_cast<int>(pop.size())));
+            std::vector<Agent> worst_agents(pop.rbegin(), pop.rbegin() + std::min(n_worst, static_cast<int>(pop.size())));
+            return std::make_tuple(pop, best_agents, worst_agents);
+        }
+    }
+}
+
+std::vector<Agent> OriginalACOR::get_sorted_population(std::vector<Agent>& pop, const std::string& minmax)
+{
+    if (minmax == "min")
+    {
+        std::sort(pop.begin(), pop.end(), [](const Agent& a, const Agent& b) {
+            return a.getfitness() < b.getfitness();
+            });
+    }
+    else
+    {
+        std::sort(pop.begin(), pop.end(), [](const Agent& a, const Agent& b) {
+            return a.getfitness() > b.getfitness();
+            });
+    }
+    return pop;
+}
+
 void OriginalACOR::solve(Problem* probleme)
 {
     d_p = probleme;
+    generate_population();
 }
 
 void OriginalACOR::evolve(int epoch)
@@ -101,6 +156,8 @@ void OriginalACOR::evolve(int epoch)
         Agent agent = generate_empty_agent(pos_new);
         pop_new.push_back(agent);
         // You need to add a condition for the 'mode' check here
+        pop_new.back().set_fitness(calculate_fitness(pos_new));
+
     }
 
     pop_new = update_target_for_population(pop_new);
