@@ -213,7 +213,7 @@ void OriginalACOR::evolve(int epoch)
             child[jdx] = pop[rdx].getsolution()[jdx] + randomValue * matrix_sigma[rdx][jdx];
         }
 
-        std::vector<double> pos_new = correct_solution(child);
+        std::vector<double> pos_new = d_p->correct_solution(child);
         Agent agent = generate_empty_agent(pos_new);
         pop_new.push_back(agent);
         // You need to add a condition for the 'mode' check here

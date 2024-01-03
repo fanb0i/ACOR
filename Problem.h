@@ -3,6 +3,7 @@
 #include <functional>
 #include <vector>
 #include <random>
+#include <algorithm>
 
 class Problem
 {
@@ -11,6 +12,7 @@ public:
 	std::vector<double> generate_solution();
 	double calculate_fitness(std::vector<double>& solution);
 	std::vector<double> correct_solution(std::vector<double>& solution);
+	double correct(double value);
 	int n_dims();
 	std::string minmax();
 private:
