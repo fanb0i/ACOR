@@ -146,9 +146,6 @@ Agent OriginalACOR::solve(Problem* probleme)
         evolve(i);
         pop = get_sorted_population(pop,d_p->minmax());
         g_best = pop[0];
-
-
-
         auto end_time = std::chrono::high_resolution_clock::now();
         auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
         track_optimize_step(pop, i, elapsed_time);

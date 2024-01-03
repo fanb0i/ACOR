@@ -8,7 +8,7 @@
 class Problem
 {
 public:
-	Problem(int _n_vars, double _lb, double ub, std::function<double(const std::vector<double>&)> ss,std::string _min_max);
+	Problem(int _n_vars, double _lb, double ub, std::function<double(std::vector<double>&)> ss,std::string _min_max);
 	std::vector<double> generate_solution();
 	double calculate_fitness(std::vector<double>& solution);
 	std::vector<double> correct_solution(std::vector<double>& solution);
