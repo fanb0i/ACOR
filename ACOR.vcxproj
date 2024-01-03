@@ -130,7 +130,6 @@
     <ClCompile Include="ACOR.cpp" />
     <ClCompile Include="Agent.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="optimizer.cpp" />
     <ClCompile Include="Problem.cpp" />
     <ClCompile Include="Solution.cpp" />
     <ClCompile Include="Target.cpp" />
@@ -138,7 +137,6 @@
   <ItemGroup>
     <ClInclude Include="ACOR.h" />
     <ClInclude Include="Agent.h" />
-    <ClInclude Include="optimizer.h" />
     <ClInclude Include="Problem.h" />
     <ClInclude Include="Solution.h" />
     <ClInclude Include="Target.h" />

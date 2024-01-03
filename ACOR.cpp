@@ -1,10 +1,16 @@
 #include "ACOR.h"
 
+
 OriginalACOR::OriginalACOR(int epoch, int pop_size, int sample_count, double intent_factor, double zeta, bool sort_flag)
     : epoch(epoch), pop_size(pop_size), sample_count(sample_count),
     intent_factor(intent_factor), zeta(zeta), sort_flag(sort_flag)
 {
     pop.reserve(pop_size);
+}
+
+double OriginalACOR::calculate_fitness(std::vector<double>& solution)
+{
+    d_p->calculate_fitness(solution);
 }
 
 void OriginalACOR::generate_population()
@@ -17,12 +23,26 @@ void OriginalACOR::generate_population()
 
 Agent OriginalACOR::generate_agent()
 {
-    return Agent();
+    Agent a = generate_empty_agent();
+    std::vector<double> solution = a.getsolution();
+    a.set_fitness(calculate_fitness(solution));
+    return a;
 }
 
-void OriginalACOR::solve(const Problem& probleme)
+Agent OriginalACOR::generate_empty_agent()
 {
-    // Your solve implementation goes here
+    std::vector<double> solution = d_p->generate_solution();
+    return Agent(solution);
+}
+
+Agent OriginalACOR::generate_empty_agent(std::vector<double>& solution)
+{
+    return Agent(solution);
+}
+
+void OriginalACOR::solve(Problem* probleme)
+{
+    d_p = probleme;
 }
 
 void OriginalACOR::evolve(int epoch)
@@ -45,17 +65,17 @@ void OriginalACOR::evolve(int epoch)
     }
 
     // Means and Standard Deviations
-    std::vector<std::vector<double>> matrix_pos(pop_size, std::vector<double>(problem.n_dims));
+    std::vector<std::vector<double>> matrix_pos(pop_size, std::vector<double>(d_p->n_dims()));
     for (int idx = 0; idx < pop_size; ++idx)
     {
-        matrix_pos[idx] = pop[idx].solution;
+        matrix_pos[idx] = pop[idx].getsolution();
     }
 
-    std::vector<std::vector<double>> matrix_sigma(pop_size, std::vector<double>(pop[0].solution.size()));
+    std::vector<std::vector<double>> matrix_sigma(pop_size, std::vector<double>(pop[0].getsolution().size()));
     for (int idx = 0; idx < pop_size; ++idx)
     {
         std::vector<double> temp_vec(pop_size);
-        for (int jdx = 0; jdx < pop[idx].solution.size(); ++jdx)
+        for (int jdx = 0; jdx < pop[idx].getsolution().size(); ++jdx)
         {
             std::vector<double> temp_vec(pop_size);
             for (int kdx = 0; kdx < pop_size; ++kdx)
@@ -70,11 +90,11 @@ void OriginalACOR::evolve(int epoch)
     std::vector<Agent> pop_new;
     for (int idx = 0; idx < sample_count; ++idx)
     {
-        std::vector<double> child(problem.n_dims);
-        for (int jdx = 0; jdx < problem.n_dims; ++jdx)
+        std::vector<double> child(d_p->n_dims());
+        for (int jdx = 0; jdx < d_p->n_dims(); ++jdx)
         {
             int rdx = get_index_roulette_wheel_selection(matrix_p);
-            child[jdx] = pop[rdx].solution[jdx] + generator.normal() * matrix_sigma[rdx][jdx];
+            child[jdx] = pop[rdx].getsolution()[jdx] + generator.normal() * matrix_sigma[rdx][jdx];
         }
 
         std::vector<double> pos_new = correct_solution(child);
@@ -84,5 +104,5 @@ void OriginalACOR::evolve(int epoch)
     }
 
     pop_new = update_target_for_population(pop_new);
-    pop = get_sorted_and_trimmed_population(pop + pop_new, pop_size, problem.minmax);
+    pop = get_sorted_and_trimmed_population(pop + pop_new, pop_size, d_p->minmax());
 }
