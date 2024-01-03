@@ -6,6 +6,7 @@ class Problem
 {
 public:
 	Problem(int _n_vars, double _lb, double ub, std::function<double(const std::vector<double>&)> ss);
+
 private:
 	using ObjectiveFunction = std::function<double(const std::vector<double>&)>;
 	ObjectiveFunction obj_func;
