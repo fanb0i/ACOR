@@ -239,6 +239,12 @@ void OriginalACOR::evolve(int epoch)
     // Insert elements from the second vector
     finalpop.insert(finalpop.end(), pop_new.begin(), pop_new.end());
     pop = get_sorted_and_trimmed_population(finalpop);
+    /* std::cout << "[ ";
+    for (int i=0 ; i<pop.size() ; i++){
+        std::cout << pop[0].getfitness();
+        std::cout << ", ";
+    }
+    std::cout << "] ";*/
 }
 
 void OriginalACOR::track_optimize_step(std::vector<Agent>& population, int epoch, long time)
