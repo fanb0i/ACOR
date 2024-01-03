@@ -133,6 +133,7 @@
     <ClCompile Include="optimizer.cpp" />
     <ClCompile Include="Problem.cpp" />
     <ClCompile Include="Solution.cpp" />
+    <ClCompile Include="Target.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ACOR.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="optimizer.h" />
     <ClInclude Include="Problem.h" />
     <ClInclude Include="Solution.h" />
+    <ClInclude Include="Target.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

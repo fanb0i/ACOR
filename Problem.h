@@ -13,5 +13,7 @@ private:
 	int n_vars;
 	double lb;
 	double ub;
+	bool min_max;
+
 };
 
