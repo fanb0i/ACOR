@@ -10,7 +10,7 @@ double f(std::vector<double>& solution)
 }
 int main()
 {
-	Problem* p = new Problem{30,-2,10,f,"max"};
+	Problem* p = new Problem{30,-2,10,f,"min"};
 	OriginalACOR acor(1000, 50, 25, 0.5, 1, 1);
 	Agent g_best = acor.solve(p);
 	std::cout << g_best.getfitness();

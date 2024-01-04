@@ -62,14 +62,24 @@ int OriginalACOR::get_index_roulette_wheel_selection(const std::vector<double>& 
         return static_cast<int>(generator() % list_fitness.size());
     }
 
+    // If the problem is "min", invert the fitness values
+    if (d_p->minmax() == "min") {
+        std::transform(final_fitness.begin(), final_fitness.end(), final_fitness.begin(),
+            [max_fitness = *std::max_element(list_fitness.begin(), list_fitness.end())](double val) {
+                return max_fitness - val;
+            });
+    }
+
     // Normalize fitness values
     std::for_each(final_fitness.begin(), final_fitness.end(),
         [&sum_fitness](double& val) { val /= sum_fitness; });
 
+    // Find the index with probabilities
     std::discrete_distribution<int> distribution(final_fitness.begin(), final_fitness.end());
+    int selected_index = distribution(generator);
 
     // Return the selected index
-    return distribution(generator);
+    return selected_index;
 }
 
 
