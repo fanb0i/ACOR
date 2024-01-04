@@ -8,10 +8,22 @@ double f(std::vector<double>& solution)
 		sum += solution[i] * solution[i];
 	return sum;
 }
+double fonctionRastrigin(std::vector<double> x)
+{
+	const double A = 10.0;
+	int n = x.size();
+	double sum = A * n;
+
+	for (int i = 0; i < n; ++i) {
+		sum += (x[i] * x[i] - A * cos(2.0 * M_PI * x[i]));
+	}
+
+	return sum;
+}
 int main()
 {
-	Problem* p = new Problem{30,-2,10,f,"min"};
-	OriginalACOR acor(1000, 50, 25, 0.5, 1, 1);
+	Problem* p = new Problem{30,-2,10,fonctionRastrigin,"min"};
+	OriginalACOR acor(10000, 30, 20, 0.5, 3.50, 1);
 	Agent g_best = acor.solve(p);
 	std::cout << g_best.getfitness();
 }
