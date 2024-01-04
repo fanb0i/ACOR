@@ -18,7 +18,7 @@ public:
 	std::string minmax();
 private:
 	using ObjectiveFunction = std::function<double(std::vector<double>&)>;
-	ObjectiveFunction obj_func;
+	ObjectiveFunction obj_func;            
 	std::mt19937 gen;
 	int n_vars;
 	double lb;

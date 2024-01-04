@@ -42,20 +42,18 @@ Agent OriginalACOR::generate_empty_agent(std::vector<double>& solution)
 
 int OriginalACOR::get_index_roulette_wheel_selection(const std::vector<double>& list_fitness)
 {
-    std::mt19937 generator;
+    std::mt19937 generator(std::random_device{}());
+
     if (list_fitness.empty()) {
         // Handle empty list
         return -1; // or any other appropriate value
     }
 
+    // Adjust for negative fitness values
     std::vector<double> final_fitness = list_fitness;
-    if (*std::min_element(list_fitness.begin(), list_fitness.end()) < 0) {
-        // Shift to handle negative fitness values
-        std::transform(final_fitness.begin(), final_fitness.end(), final_fitness.begin(),
-            [min_val = *std::min_element(list_fitness.begin(), list_fitness.end())](double val) {
-                return val - min_val;
-            });
-    }
+    double min_fitness = *std::min_element(list_fitness.begin(), list_fitness.end());
+    std::transform(final_fitness.begin(), final_fitness.end(), final_fitness.begin(),
+        [min_fitness](double val) { return val - min_fitness; });
 
     double sum_fitness = std::accumulate(final_fitness.begin(), final_fitness.end(), 0.0);
 
@@ -70,10 +68,8 @@ int OriginalACOR::get_index_roulette_wheel_selection(const std::vector<double>& 
 
     std::discrete_distribution<int> distribution(final_fitness.begin(), final_fitness.end());
 
-    // Capture variables inside the lambda
-    return [this, &distribution, &generator]() {
-        return distribution(generator);
-        }();
+    // Return the selected index
+    return distribution(generator);
 }
 
 
@@ -91,9 +87,7 @@ void OriginalACOR::after_initialization()
         g_worst = worst[0];
     }
 
-    if (sort_flag) {
-        pop = pop_temp;
-    }
+    pop = pop_temp;
 }
 
 
@@ -190,7 +184,6 @@ void OriginalACOR::evolve(int epoch)
     std::vector<std::vector<double>> matrix_sigma(pop_size, std::vector<double>(pop[0].getsolution().size()));
     for (int idx = 0; idx < pop_size; ++idx)
     {
-        std::vector<double> temp_vec(pop_size);
         for (int jdx = 0; jdx < pop[idx].getsolution().size(); ++jdx)
         {
             std::vector<double> temp_vec(pop_size);
@@ -212,11 +205,9 @@ void OriginalACOR::evolve(int epoch)
         for (int jdx = 0; jdx < d_p->n_dims(); ++jdx)
         {
             int rdx = get_index_roulette_wheel_selection(matrix_p);
-            double mean = 0.0;
-            double stddev = 1.0;
 
             // Create a normal distribution
-            std::normal_distribution<double> normalDistribution(mean, stddev);
+            std::normal_distribution<double> normalDistribution(0.0, 1.0);
 
             // Generate a random number from the normal distribution
             double randomValue = normalDistribution(generator);
@@ -228,8 +219,8 @@ void OriginalACOR::evolve(int epoch)
         pop_new.push_back(agent);
         // You need to add a condition for the 'mode' check here
         pop_new.back().set_fitness(calculate_fitness(pos_new));
-
     }
+
     std::vector<Agent> finalpop;
     finalpop.reserve(pop.size() + pop_new.size());
 
