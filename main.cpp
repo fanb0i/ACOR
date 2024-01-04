@@ -22,8 +22,8 @@ double fonctionRastrigin(std::vector<double> x)
 }
 int main()
 {
-	Problem* p = new Problem{30,-2,10,fonctionRastrigin,"min"};
-	OriginalACOR acor(10000, 30, 20, 0.5, 3.50, 1);
+	Problem* p = new Problem{30,-5.12,5.12,fonctionRastrigin,"min"};
+	OriginalACOR acor(10000, 30, 20, 0.5, 1.0, 3.15);
 	Agent g_best = acor.solve(p);
 	std::cout << g_best.getfitness();
 }
