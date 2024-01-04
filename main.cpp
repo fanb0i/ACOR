@@ -1,11 +1,9 @@
-// ACOR.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
 #include <iostream>
 #include "ACOR.h"
 double f(std::vector<double>& solution)
 {
-	double sum=0;
+	double sum = 0;
 	for (int i = 0; i < solution.size(); i++)
 		sum += solution[i] * solution[i];
 	return sum;
