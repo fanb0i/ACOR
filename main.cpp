@@ -114,8 +114,8 @@ double schwefel(const std::vector<double>& x) {
 
 int main()
 {
-	Problem* p = new Problem{30,-5.12,5.12,ackley,"min"};
-	OriginalACOR acor(10000, 30, 20, 0.5, 1.0, 3.15);
+	Problem* p = new Problem{30,-5.12,5.12,schwefel,"min"};
+	OriginalACOR acor(10000, 30, 20, 0.5, 1.0);
 	Agent g_best = acor.solve(p);
 	std::cout << g_best.getfitness();
 }

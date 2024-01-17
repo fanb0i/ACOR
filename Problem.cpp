@@ -40,12 +40,7 @@ std::vector<double> Problem::correct_solution(std::vector<double>& solution)
     return x_new;
 }
 
-double Problem::generaterandom()
-{
 
-    std::uniform_real_distribution<double> dis(lb, ub);
-    return dis(gen);
-}
 
 double Problem::correct(double value)
 {

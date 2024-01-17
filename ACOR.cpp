@@ -1,9 +1,9 @@
 #include "ACOR.h"
 
 
-OriginalACOR::OriginalACOR(int epoch, int pop_size, int sample_count, double intent_factor, double zeta, bool sort_flag)
-    : epoch(epoch), pop_size(pop_size), sample_count(sample_count),
-    intent_factor(intent_factor), zeta(zeta), sort_flag(sort_flag)
+OriginalACOR::OriginalACOR(int epoch, int pop_size, int sample_count, double intent_factor, double zeta)
+    : epoch(epoch), pop_size(pop_size), sample_count(sample_count), 
+    intent_factor(intent_factor), zeta(zeta),d_p{nullptr}
 {
     pop.reserve(pop_size);
 }
@@ -84,22 +84,6 @@ int OriginalACOR::get_index_roulette_wheel_selection(const std::vector<double>& 
 
 
 
-void OriginalACOR::after_initialization()
-{
-    // The initial population is sorted or not depending on the algorithm's strategy
-    std::vector<Agent> pop_temp;
-    std::vector<Agent> best;
-    std::vector<Agent> worst;
-    get_special_agents(pop, 1, 1, d_p->minmax(), pop_temp,best,worst);
-   
-    if (!best.empty() && !worst.empty()) {
-        g_best = best[0];
-        g_worst = worst[0];
-    }
-
-    pop = pop_temp;
-}
-
 
 std::vector<Agent> OriginalACOR::get_sorted_population(std::vector<Agent>& pop, const std::string& minmax)
 {
@@ -118,27 +102,6 @@ std::vector<Agent> OriginalACOR::get_sorted_population(std::vector<Agent>& pop, 
     return pop;
 }
 
-void OriginalACOR::get_special_agents(
-    std::vector<Agent>& pop, int n_best, int n_worst,
-    const std::string& minmax, std::vector<Agent>& sorted_pop,
-    std::vector<Agent>& best_agents, std::vector<Agent>& worst_agents)
-{
-    // Sort the population based on the problem type (min or max)
- 
-    
-    sorted_pop = get_sorted_population(pop,minmax);
-
-    // Get the best agents
-    if (n_best > 0) {
-        best_agents.assign(sorted_pop.begin(), sorted_pop.begin() + std::min(n_best, static_cast<int>(sorted_pop.size())));
-    }
-
-    // Get the worst agents
-    if (n_worst > 0) {
-        worst_agents.assign(sorted_pop.end() - std::min(n_worst, static_cast<int>(sorted_pop.size())), sorted_pop.end());
-    }
-}
-
 
 Agent OriginalACOR::solve(Problem* probleme)
 {
@@ -148,6 +111,7 @@ Agent OriginalACOR::solve(Problem* probleme)
     {
         auto start_time = std::chrono::high_resolution_clock::now();
         evolve(i);
+        //non nécessaire
         pop = get_sorted_population(pop,d_p->minmax());
         g_best = pop[0];
         auto end_time = std::chrono::high_resolution_clock::now();
@@ -179,6 +143,7 @@ void OriginalACOR::evolve(int epoch)
 
     std::vector<double> matrix_p(pop_size);
     double sum_w = std::accumulate(matrix_w.begin(), matrix_w.end(), 0.0);
+    //Normalisation
     for (int idx = 0; idx < pop_size; ++idx)
     {
         matrix_p[idx] = matrix_w[idx] / sum_w;
@@ -239,20 +204,9 @@ void OriginalACOR::evolve(int epoch)
 
     // Insert elements from the second vector
     finalpop.insert(finalpop.end(), pop_new.begin(), pop_new.end());
+
     pop = get_sorted_and_trimmed_population(finalpop);
-    /*
-    std::cout << "[ ";
-    for (int i=0 ; i<pop.size() ; i++){
-        for (int j = 0;j<pop[i].getsolution().size(); j++)
-        {
-            std::vector<double> solutions = pop[i].getsolution();
-            std::cout << solutions[j] << ",";
-        }
-        std::cout << "],[";
-        std::cout << ", ";
-    }
-    std::cout << "] ";
-    */
+
 }
 
 void OriginalACOR::track_optimize_step(std::vector<Agent>& population, int epoch, long time)
